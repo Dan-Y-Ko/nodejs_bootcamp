@@ -1,4 +1,8 @@
 const fs = require("fs");
+const http = require("http");
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Files
 
 // blocking, synchronous way
 /* const textIn = fs.readFileSync("./txt/input.txt", "utf-8");
@@ -9,7 +13,7 @@ fs.writeFileSync("./txt/output.txt", textOut);
 console.log("File written!"); */
 
 // non-blocking, asynchronous way
-fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
+/* fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
   if (err) return console.log("error");
 
   fs.readFile(`./txt/${data1}.txt`, "utf-8", (err, data2) => {
@@ -22,4 +26,15 @@ fs.readFile("./txt/start.txt", "utf-8", (err, data1) => {
       });
     });
   });
+}); */
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+// Server
+
+const server = http.createServer((req, res) => {
+  res.end("hello from the server");
+});
+
+server.listen(8000, "127.0.0.1", () => {
+  console.log("listening to requests on port 8000");
 });
