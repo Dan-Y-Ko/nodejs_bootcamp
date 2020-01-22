@@ -1,8 +1,23 @@
 const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 
 dotenv.config({
   path: './config.env'
 });
+
+mongoose
+  .connect(process.env.DATABASE, {
+    useNewUrlParser: true,
+    useCreateIndex: true,
+    useFindAndModify: false,
+    useUnifiedTopology: true
+  })
+  .then(() => {
+    console.log('Connected to db');
+  })
+  .catch(() => {
+    console.log('Connection failed');
+  });
 
 const app = require('./app');
 
