@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server.js"
+    "start": "nodemon server.js",
+    "seedData": "node dev-data/data/import-dev-data.js --import",
+    "deleteData": "node dev-data/data/import-dev-data.js --delete"
   },
   "license": "MIT",
   "dependencies": {
