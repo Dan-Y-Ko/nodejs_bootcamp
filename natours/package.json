@@ -4,6 +4,7 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon server.js",
+    "start:prod": "NODE_ENV=production nodemon server.js",
     "seedData": "node dev-data/data/import-dev-data.js --import",
     "deleteData": "node dev-data/data/import-dev-data.js --delete",
     "debug": "ndb server.js"
