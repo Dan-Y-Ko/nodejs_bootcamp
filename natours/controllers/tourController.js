@@ -1,6 +1,7 @@
 // const fs = require('fs');
 const Tour = require('../models/tourModel');
 const APIFeatures = require('../utils/ApiFeatures');
+const asyncHandler = require('../utils/asyncHandler');
 
 /* const tours = JSON.parse(
   fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
@@ -80,23 +81,16 @@ exports.getTour = async (req, res) => {
   }
 };
 
-exports.createTour = async (req, res) => {
-  try {
-    const newTour = await Tour.create(req.body);
+exports.createTour = asyncHandler(async (req, res, next) => {
+  const newTour = await Tour.create(req.body);
 
-    res.status(201).json({
-      status: 'success',
-      data: {
-        tour: newTour
-      }
-    });
-  } catch (err) {
-    res.status(400).json({
-      status: 'fail',
-      message: err
-    });
-  }
-};
+  res.status(201).json({
+    status: 'success',
+    data: {
+      tour: newTour
+    }
+  });
+});
 
 exports.updateTour = async (req, res) => {
   try {
