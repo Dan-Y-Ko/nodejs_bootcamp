@@ -5,7 +5,8 @@
   "scripts": {
     "start": "nodemon server.js",
     "seedData": "node dev-data/data/import-dev-data.js --import",
-    "deleteData": "node dev-data/data/import-dev-data.js --delete"
+    "deleteData": "node dev-data/data/import-dev-data.js --delete",
+    "debug": "ndb server.js"
   },
   "license": "MIT",
   "dependencies": {
@@ -17,6 +18,7 @@
     "validator": "^12.2.0"
   },
   "devDependencies": {
+    "ndb": "^1.1.5",
     "nodemon": "^2.0.2"
   }
 }
