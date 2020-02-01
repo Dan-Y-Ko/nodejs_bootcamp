@@ -172,12 +172,14 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     return next(new AppError('Token is invalid or has expired', 400));
   }
 
+  // check if reset password is different from current password
   if (await user.comparePassword(req.body.password, user.password)) {
     return next(
       new AppError('New password must be different from old password', 400)
     );
   }
 
+  // if passwords are different then update password
   user.password = req.body.password;
   user.passwordConfirm = req.body.passwordConfirm;
   user.passwordResetToken = undefined;
@@ -196,6 +198,16 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   // Check if POSTed current password is correct
   if (!(await user.comparePassword(req.body.passwordCurrent, user.password))) {
     return next(new AppError('Your current password is wrong.', 401));
+  }
+
+  // check if new password is different from current password
+  if (await user.comparePassword(req.body.password, user.password)) {
+    return next(
+      new AppError(
+        'New password needs to be different from current password',
+        400
+      )
+    );
   }
 
   // If so, update password
