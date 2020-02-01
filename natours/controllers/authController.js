@@ -47,7 +47,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   // check if user exists and password is correct
   const user = await User.findOne({ email }).select('+password');
 
-  if (!user || !(await user.correctPassword(password, user.password))) {
+  if (!user || !(await user.comparePassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
 
@@ -172,7 +172,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     return next(new AppError('Token is invalid or has expired', 400));
   }
 
-  if (await user.newResetPassword(req.body.password, user.password)) {
+  if (await user.comparePassword(req.body.password, user.password)) {
     return next(
       new AppError('New password must be different from old password', 400)
     );
@@ -194,7 +194,7 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   const user = await User.findById(req.user.id).select('+password');
 
   // Check if POSTed current password is correct
-  if (!(await user.correctPassword(req.body.passwordCurrent, user.password))) {
+  if (!(await user.comparePassword(req.body.passwordCurrent, user.password))) {
     return next(new AppError('Your current password is wrong.', 401));
   }
 
