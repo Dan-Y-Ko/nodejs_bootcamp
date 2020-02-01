@@ -23,7 +23,11 @@ exports.signup = asyncHandler(async (req, res, next) => {
     status: 'success',
     token,
     data: {
-      user: newUser
+      user: {
+        id: newUser._id,
+        name: newUser.name,
+        email: newUser.email
+      }
     }
   });
 });
@@ -37,9 +41,9 @@ exports.login = asyncHandler(async (req, res, next) => {
   }
 
   // check if user exists and password is correct
-  const user = User.findOne({ email }).select('+password');
+  const user = await User.findOne({ email }).select('+password');
 
-  if (!user || !(await user.correctPasssword(password, user.password))) {
+  if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password', 401));
   }
 
@@ -50,4 +54,27 @@ exports.login = asyncHandler(async (req, res, next) => {
     status: 'success',
     token
   });
+});
+
+exports.protect = asyncHandler(async (req, res, next) => {
+  let token;
+  // get token and check if it exists
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
+    token = req.headers.authorization.split(' ')[1];
+  }
+
+  if (!token) {
+    return next(new AppError('Please login to get access', 401));
+  }
+
+  // validate token
+
+  // check if user still exists
+
+  // check if user changed password after token was issued
+
+  next();
 });
