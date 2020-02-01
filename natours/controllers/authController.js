@@ -14,6 +14,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
+    role: req.body.role,
     password: req.body.password,
     passwordConfirm: req.body.passwordConfirm
   });
@@ -24,11 +25,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
     status: 'success',
     token,
     data: {
-      user: {
-        id: newUser._id,
-        name: newUser.name,
-        email: newUser.email
-      }
+      user: newUser
     }
   });
 });
