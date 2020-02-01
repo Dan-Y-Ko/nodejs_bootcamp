@@ -33,15 +33,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
     passwordConfirm: req.body.passwordConfirm
   });
 
-  const token = signToken(newUser._id);
-
-  res.status(201).json({
-    status: 'success',
-    token,
-    data: {
-      user: newUser
-    }
-  });
+  createSendToken(newUser, 201, res);
 });
 
 exports.login = asyncHandler(async (req, res, next) => {
@@ -60,12 +52,7 @@ exports.login = asyncHandler(async (req, res, next) => {
   }
 
   // if everything is ok, send token to client
-  const token = signToken(user._id);
-
-  res.status(200).json({
-    status: 'success',
-    token
-  });
+  createSendToken(user, 200, res);
 });
 
 exports.protect = asyncHandler(async (req, res, next) => {
@@ -199,12 +186,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
   // Update changedPasswordAt property for the user
   // Log the user in, send JWT
-  const token = signToken(user._id);
-
-  res.status(200).json({
-    status: 'success',
-    token
-  });
+  createSendToken(user, 200, res);
 });
 
 exports.updatePassword = asyncHandler(async (req, res, next) => {
