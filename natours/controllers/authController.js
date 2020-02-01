@@ -68,13 +68,24 @@ exports.protect = asyncHandler(async (req, res, next) => {
   }
 
   if (!token) {
-    return next(new AppError('Please login to get access', 401));
+    return next(
+      new AppError('You are not logged in! Please log in to get access.', 401)
+    );
   }
 
   // validate token
-  jwt.verify(token, process.env.JWT_SECRET);
+  const decoded = await promisify(jwt.verify)(token, process.env.JWT_SECRET);
 
   // check if user still exists
+  const currentUser = await User.findById(decoded.id);
+  if (!currentUser) {
+    return next(
+      new AppError(
+        'The user belonging to this token does no longer exist.',
+        401
+      )
+    );
+  }
 
   // check if user changed password after token was issued
 
