@@ -180,4 +180,10 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
   // Update changedPasswordAt property for the user
   // Log the user in, send JWT
+  const token = signToken(user._id);
+
+  res.status(200).json({
+    status: 'success',
+    token
+  });
 });
