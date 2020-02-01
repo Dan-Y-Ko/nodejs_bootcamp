@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
@@ -153,4 +154,11 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
       500
     );
   }
+});
+
+exports.resetPassword = asyncHandler(async (req, res, next) => {
+  // Get user based on the token
+  // If token has not expired, and there is user, set the new password
+  // Update changedPasswordAt property for the user
+  // Log the user in, send JWT
 });
