@@ -24,7 +24,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.login = (req, res, next) => {
+exports.login = asyncHandler(async (req, res, next) => {
   const { email, password } = req.body;
 
   // check if email and password exists
@@ -33,7 +33,9 @@ exports.login = (req, res, next) => {
   }
 
   // check if user exists and password is correct
-  const user = User.findOne({ email });
+  const user = User.findOne({ email }).select('+password');
+
+  console.log(user);
 
   // if everything is ok, send token to client
   const token = '';
@@ -41,4 +43,4 @@ exports.login = (req, res, next) => {
     status: 'success',
     token
   });
-};
+});
