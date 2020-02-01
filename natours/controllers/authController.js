@@ -194,3 +194,10 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
     token
   });
 });
+
+exports.updatePassword = asyncHandler(async (req, res, next) => {
+  // Get user from collection
+  // Check if POSTed current password is correct
+  // If so, update password
+  // Log user in, send JWT
+});
