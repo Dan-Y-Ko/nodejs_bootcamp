@@ -205,4 +205,5 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   // User.findByIdAndUpdate will NOT work as intended!
 
   // Log user in, send JWT
+  createSendToken(user, 200, res);
 });
