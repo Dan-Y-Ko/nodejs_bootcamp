@@ -191,6 +191,8 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
 
 exports.updatePassword = asyncHandler(async (req, res, next) => {
   // Get user from collection
+  const user = await User.findById(req.user.id).select('+password');
+
   // Check if POSTed current password is correct
   // If so, update password
   // Log user in, send JWT
