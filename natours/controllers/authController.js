@@ -199,5 +199,10 @@ exports.updatePassword = asyncHandler(async (req, res, next) => {
   }
 
   // If so, update password
+  user.password = req.body.password;
+  user.passwordConfirm = req.body.passwordConfirm;
+  await user.save();
+  // User.findByIdAndUpdate will NOT work as intended!
+
   // Log user in, send JWT
 });
