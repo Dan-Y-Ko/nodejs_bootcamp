@@ -1,5 +1,6 @@
 const User = require('../models/userModel');
 const asyncHandler = require('../utils/asyncHandler');
+const AppError = require('../utils/AppError');
 
 exports.getAllUsers = asyncHandler(async (req, res, next) => {
   const users = await User.find();
@@ -12,6 +13,8 @@ exports.getAllUsers = asyncHandler(async (req, res, next) => {
     }
   });
 });
+
+exports.updateMe = (req, res, next) => {};
 
 exports.getUser = (req, res) => {
   res.status(500).json({
