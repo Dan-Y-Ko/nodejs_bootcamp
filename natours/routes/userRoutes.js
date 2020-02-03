@@ -21,7 +21,7 @@ router.patch('/updateMe', authController.protect, userController.updateMe);
 router
   .route('/')
   .get(userController.getAllUsers)
-  .post(userController.createuser);
+  .post(userController.createUser);
 
 router
   .route('/:id')
