@@ -50,6 +50,8 @@ exports.updateMe = asyncHandler(async (req, res, next) => {
   });
 });
 
+exports.deleteMe = asyncHandler(async (req, res, next) => {});
+
 exports.getUser = (req, res) => {
   res.status(500).json({
     status: 'error',
