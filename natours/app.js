@@ -40,6 +40,7 @@ app.use(
 app.use(mongoSanitize());
 
 // data sanitization against xss
+app.use(xss());
 
 /* Serving static files in express
 app.use(express.static(`${__dirname}/public`)); */
