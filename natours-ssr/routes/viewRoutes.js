@@ -6,13 +6,13 @@ const router = express.Router();
 
 router.get('/', viewsController.getOverview);
 router.get('/tour/:slug', viewsController.getTour);
-router.get('/login', viewsController.getLoginForm);
+/* router.get('/login', viewsController.getLoginForm);
 router.get('/me', authController.protect, viewsController.getAccount);
 
 router.post(
   '/submit-user-data',
   authController.protect,
   viewsController.updateUserData
-);
+); */
 
 module.exports = router;
