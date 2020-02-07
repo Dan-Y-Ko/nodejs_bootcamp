@@ -1,9 +1,9 @@
 const Tour = require('../models/tourModel');
 const User = require('../models/userModel');
-const asyncHandler = require('../utils/asyncHandler');
+const catchAsync = require('../utils/catchAsync');
 const AppError = require('../utils/appError');
 
-exports.getOverview = asyncHandler(async (req, res, next) => {
+exports.getOverview = catchAsync(async (req, res, next) => {
   // 1) Get tour data from collection
   const tours = await Tour.find();
 
@@ -15,7 +15,7 @@ exports.getOverview = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.getTour = asyncHandler(async (req, res, next) => {
+exports.getTour = catchAsync(async (req, res, next) => {
   // 1) Get the data, for the requested tour (including reviews and guides)
   const tour = await Tour.findOne({ slug: req.params.slug }).populate({
     path: 'reviews',
@@ -46,7 +46,7 @@ exports.getAccount = (req, res) => {
   });
 };
 
-exports.updateUserData = asyncHandler(async (req, res, next) => {
+exports.updateUserData = catchAsync(async (req, res, next) => {
   const updatedUser = await User.findByIdAndUpdate(
     req.user.id,
     {

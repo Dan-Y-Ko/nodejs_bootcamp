@@ -1,6 +1,6 @@
-const User = require('../models/userModel');
-const asyncHandler = require('../utils/asyncHandler');
-const AppError = require('../utils/AppError');
+const User = require('./../models/userModel');
+const catchAsync = require('./../utils/catchAsync');
+const AppError = require('./../utils/appError');
 const factory = require('./handlerFactory');
 
 const filterObj = (obj, ...allowedFields) => {
@@ -16,7 +16,7 @@ exports.getMe = (req, res, next) => {
   next();
 };
 
-exports.updateMe = asyncHandler(async (req, res, next) => {
+exports.updateMe = catchAsync(async (req, res, next) => {
   // 1) Create error if user POSTs password data
   if (req.body.password || req.body.passwordConfirm) {
     return next(
@@ -44,7 +44,7 @@ exports.updateMe = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.deleteMe = asyncHandler(async (req, res, next) => {
+exports.deleteMe = catchAsync(async (req, res, next) => {
   await User.findByIdAndUpdate(req.user.id, { active: false });
 
   res.status(204).json({
@@ -56,19 +56,12 @@ exports.deleteMe = asyncHandler(async (req, res, next) => {
 exports.createUser = (req, res) => {
   res.status(500).json({
     status: 'error',
-    message: 'This route is not yet defined'
+    message: 'This route is not defined! Please use /signup instead'
   });
 };
 
-exports.updateUser = (req, res) => {
-  res.status(500).json({
-    status: 'error',
-    message: 'This route is not yet defined'
-  });
-};
-
-exports.getAllUsers = factory.getAll(User);
 exports.getUser = factory.getOne(User);
+exports.getAllUsers = factory.getAll(User);
 
 // Do NOT update passwords with this!
 exports.updateUser = factory.updateOne(User);

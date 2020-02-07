@@ -1,37 +1,7 @@
-// const fs = require('fs');
-const Tour = require('../models/tourModel');
-const APIFeatures = require('../utils/ApiFeatures');
-const asyncHandler = require('../utils/asyncHandler');
-const AppError = require('../utils/AppError');
+const Tour = require('./../models/tourModel');
+const catchAsync = require('./../utils/catchAsync');
 const factory = require('./handlerFactory');
-
-/* const tours = JSON.parse(
-  fs.readFileSync(`${__dirname}/../dev-data/data/tours-simple.json`)
-); */
-
-/* exports.checkId = (req, res, next, val) => {
-  if (+req.params.id > tours.length) {
-    return res.status(404).json({
-      status: 'fail',
-      message: 'Invalid Id'
-    });
-  }
-
-  next();
-}; */
-
-/* exports.checkBody = (req, res, next) => {
-  const { name, price } = req.body;
-
-  if (!name || !price) {
-    return res.status(400).json({
-      status: 'fail',
-      message: 'bad request'
-    });
-  }
-
-  next();
-}; */
+const AppError = require('./../utils/appError');
 
 exports.aliasTopTours = (req, res, next) => {
   req.query.limit = '5';
@@ -46,7 +16,7 @@ exports.createTour = factory.createOne(Tour);
 exports.updateTour = factory.updateOne(Tour);
 exports.deleteTour = factory.deleteOne(Tour);
 
-exports.getTourStats = asyncHandler(async (req, res, next) => {
+exports.getTourStats = catchAsync(async (req, res, next) => {
   const stats = await Tour.aggregate([
     {
       $match: { ratingsAverage: { $gte: 4.5 } }
@@ -78,8 +48,8 @@ exports.getTourStats = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.getMonthlyPlan = asyncHandler(async (req, res, next) => {
-  const year = Number(req.params.year); // 2021
+exports.getMonthlyPlan = catchAsync(async (req, res, next) => {
+  const year = req.params.year * 1; // 2021
 
   const plan = await Tour.aggregate([
     {
@@ -126,17 +96,16 @@ exports.getMonthlyPlan = asyncHandler(async (req, res, next) => {
 
 // /tours-within/:distance/center/:latlng/unit/:unit
 // /tours-within/233/center/34.111745,-118.113491/unit/mi
-exports.getToursWithin = asyncHandler(async (req, res, next) => {
+exports.getToursWithin = catchAsync(async (req, res, next) => {
   const { distance, latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
 
-  // get radians by dividing distance by radius of Earth. 3963.2 = miles, 6378.1 = km
   const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
 
   if (!lat || !lng) {
     next(
       new AppError(
-        'Please provide latitute and longitude in the format lat,lng.',
+        'Please provide latitutr and longitude in the format lat,lng.',
         400
       )
     );
@@ -155,7 +124,7 @@ exports.getToursWithin = asyncHandler(async (req, res, next) => {
   });
 });
 
-exports.getDistances = asyncHandler(async (req, res, next) => {
+exports.getDistances = catchAsync(async (req, res, next) => {
   const { latlng, unit } = req.params;
   const [lat, lng] = latlng.split(',');
 
@@ -164,7 +133,7 @@ exports.getDistances = asyncHandler(async (req, res, next) => {
   if (!lat || !lng) {
     next(
       new AppError(
-        'Please provide latitute and longitude in the format lat,lng.',
+        'Please provide latitutr and longitude in the format lat,lng.',
         400
       )
     );
@@ -175,7 +144,7 @@ exports.getDistances = asyncHandler(async (req, res, next) => {
       $geoNear: {
         near: {
           type: 'Point',
-          coordinates: [+lng, +lat]
+          coordinates: [lng * 1, lat * 1]
         },
         distanceField: 'distance',
         distanceMultiplier: multiplier

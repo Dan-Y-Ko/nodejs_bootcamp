@@ -2,7 +2,7 @@ const crypto = require('crypto');
 const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const User = require('./../models/userModel');
-const asyncHandler = require('./../utils/asyncHandler');
+const catchAsync = require('./../utils/catchAsync');
 const AppError = require('./../utils/appError');
 const sendEmail = require('./../utils/email');
 
@@ -36,7 +36,7 @@ const createSendToken = (user, statusCode, res) => {
   });
 };
 
-exports.signup = asyncHandler(async (req, res, next) => {
+exports.signup = catchAsync(async (req, res, next) => {
   const newUser = await User.create({
     name: req.body.name,
     email: req.body.email,
@@ -47,7 +47,7 @@ exports.signup = asyncHandler(async (req, res, next) => {
   createSendToken(newUser, 201, res);
 });
 
-exports.login = asyncHandler(async (req, res, next) => {
+exports.login = catchAsync(async (req, res, next) => {
   const { email, password } = req.body;
 
   // 1) Check if email and password exist
@@ -73,7 +73,7 @@ exports.logout = (req, res) => {
   res.status(200).json({ status: 'success' });
 };
 
-exports.protect = asyncHandler(async (req, res, next) => {
+exports.protect = catchAsync(async (req, res, next) => {
   // 1) Getting token and check of it's there
   let token;
   if (
@@ -162,7 +162,7 @@ exports.restrictTo = (...roles) => {
   };
 };
 
-exports.forgotPassword = asyncHandler(async (req, res, next) => {
+exports.forgotPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on POSTed email
   const user = await User.findOne({ email: req.body.email });
   if (!user) {
@@ -203,7 +203,7 @@ exports.forgotPassword = asyncHandler(async (req, res, next) => {
   }
 });
 
-exports.resetPassword = asyncHandler(async (req, res, next) => {
+exports.resetPassword = catchAsync(async (req, res, next) => {
   // 1) Get user based on the token
   const hashedToken = crypto
     .createHash('sha256')
@@ -230,7 +230,7 @@ exports.resetPassword = asyncHandler(async (req, res, next) => {
   createSendToken(user, 200, res);
 });
 
-exports.updatePassword = asyncHandler(async (req, res, next) => {
+exports.updatePassword = catchAsync(async (req, res, next) => {
   // 1) Get user from collection
   const user = await User.findById(req.user.id).select('+password');
 
